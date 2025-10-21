@@ -5,7 +5,7 @@ The goal of this homework is to build a min priority queue that can be used as p
 later homework, [hwMZ2](https://faculty.utrgv.edu/robert.schweller/CS3333/hwMZ2.pdf). This homework is unlike previous homeworks in that you’ll implement a template
 class. If you recall, a template class is both declared and implemented in a common header file, so the
 implementation will be done by modify a provided header file.[^1]
-![alt text](https://www.markdownguide.org/assets/images/tux.png)
+![...](Screenshot25_10_21.png)
 [^1]: This enables adding other methods and instance variables, though including additional libraries is forbidden.
 ## 2 Instructions
 The following files have been given to you:
