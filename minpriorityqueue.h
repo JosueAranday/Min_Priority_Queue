@@ -64,7 +64,11 @@ class MinPriorityQueue
 		// Must run in O(log(n)) time. 
 		void pop()
 		{
-			// TODO	
+			if (H.size()== 0){
+				cout << "There are no elements to pop."
+				return;
+			}
+			bubbleDown(0);
 		}
 
 		// If x is in the MinPriorityQueue 
@@ -89,6 +93,16 @@ class MinPriorityQueue
 			return (i-1)/2;
 		}
 
+		int childLeft(int i)
+		{
+			return 2*i + 1;
+		}
+
+		int childRight(int i)
+		{
+			return 2*i + 2;
+		}
+
 		int bubbleUp(int index)
 		{
 			int i = index;
@@ -102,6 +116,19 @@ class MinPriorityQueue
 				swap(H[i], H[parent(i)]);	// swap the two couples			
 				i = parent(i);
 			}
+			return i;
+		}
+		int bubbleDown(int index)
+		{
+			int i = index;
+			int sizeH = H.size();
+			
+			while (childLeft(i)<sizeH)		// Check that at least there's a left child
+			{
+				int smallerChildInd = childLeft(i);
+				if (childRight(i)<sizeH && H[childRight(i)].second < H[childLeft(i)].second )
+			}
+
 			return i;
 		}
 };
