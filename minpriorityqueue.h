@@ -23,7 +23,8 @@ class MinPriorityQueue
 		// Creates an empty MinPriorityQueue
 		MinPriorityQueue()
 		{
-			// TODO
+			H.clear();
+			I.clear();
 		}
 
 		// Returns the number of elements in the MinPriorityQueue.
@@ -31,8 +32,8 @@ class MinPriorityQueue
 		// Must run in O(1) time.
 		int size()
 		{
-			// TODO	
-		}	
+			return H.size();	
+		}
 
 		// Pushes a new value x with priority p
 		// into the MinPriorityQueue.
@@ -40,7 +41,12 @@ class MinPriorityQueue
 		// Must run in O(log(n)) time.		 
 		void push(T x, int p)
 		{
-			// TODO
+			pair<T, int> couple;
+			couple.first = x;
+			couple.second = p;
+			H.push_back(couple);
+			int updIndex = bubbleUp(H.size() - 1);
+			I[x] = updIndex;
 		}
 
 		// Returns the value at the front of the MinPriorityQueue.
@@ -49,7 +55,7 @@ class MinPriorityQueue
 		// Must run in O(1) time.
 		T front()
 		{
-			// TODO	
+			return (H[0].first);		// The min is always the "root", index 0
 		}
 
 		// Removes the value at the front of the MinPriorityQueue.
@@ -77,6 +83,27 @@ class MinPriorityQueue
 		// but you can add some if you want to.
 		vector< pair<T, int> > H; // The heap.
 		unordered_map<T, int> I;  // Maps values to their indices in H.
+
+		int parent(int i)
+		{
+			return (i-1)/2;
+		}
+
+		int bubbleUp(int index)
+		{
+			int i = index;
+
+			while (i > 0 && H[i].second < H[parent(i)].second) 	// while the second member is less than its parent
+			{											// which is a parent violation
+				// Before swapping, update the map 'I' for both items being moved.
+        		I[H[i].first] = parent(i);		// The child item is moving to the parent's index
+        		I[H[parent(i)].first] = i;  	// The parent item is moving to the child's index
+
+				swap(H[i], H[parent(i)]);	// swap the two couples			
+				i = parent(i);
+			}
+			return i;
+		}
 };
 
 #endif 
