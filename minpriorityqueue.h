@@ -62,7 +62,7 @@ class MinPriorityQueue
 		// Undefined behavior if the MinPriorityQueue is empty.
 		//
 		// Must run in O(log(n)) time. 
-		void pop()
+		void pop()		// Runs in O(log(n)) time
 		{
 			if (H.size() == 0){
 				//cout << "There are no elements to pop." << endl;
@@ -73,7 +73,7 @@ class MinPriorityQueue
 
 			if (H.size() == 1){
 				H.pop_back();
-				I.erase(eraseLater);
+				I.erase(eraseLater);	// Remove from the index map
 				return;
 			}
 
@@ -98,7 +98,7 @@ class MinPriorityQueue
 		// Undefined behavior otherwise.
 		//
 		// Must run in O(log(n)) time. 
-		void decrease_key(T x, int new_p)
+		void decrease_key(T x, int new_p)		// Runs in O(log(n)) time
 		{
 			int sizeH = H.size();
 			if (new_p < 0)
@@ -135,22 +135,22 @@ class MinPriorityQueue
 		vector< pair<T, int> > H; // The heap.
 		unordered_map<T, int> I;  // Maps values to their indices in H.
 
-		int parent(int i)
+		int parent(int i)	// Runs in O(1) time
 		{
 			return (i-1)/2;
 		}
 
-		int childLeft(int i)
+		int childLeft(int i)	// Runs in O(1) time
 		{
 			return 2*i + 1;
 		}
 
-		int childRight(int i)
+		int childRight(int i)	// Runs in O(1) time
 		{
 			return 2*i + 2;
 		}
 
-		int bubbleUp(int index)
+		int bubbleUp(int index)	// Runs in O(log(n)) time
 		{
 			int i = index;
 
@@ -166,28 +166,28 @@ class MinPriorityQueue
 			return i;
 		}
 
-		int bubbleDown(int index)
+		int bubbleDown(int index)		// Runs in O(log(n)) time
 		{
 			int i = index;
-			int sizeH = H.size();
+			int sizeH = H.size();		// Get the size of the heap
 			
 			while (childLeft(i)<sizeH)		// Check that at least there's a left child
 			{
 				int smallerChildInd = childLeft(i);
-				if (childRight(i)<sizeH && H[childRight(i)].second < H[childLeft(i)].second)
+				if (childRight(i) < sizeH && H[childRight(i)].second < H[childLeft(i)].second)	// If there's a right child and it's smaller than the left child
 				{
-					smallerChildInd = childRight(i);
-				}
-				if (H[i].second > H[smallerChildInd].second)
+					smallerChildInd = childRight(i);		// Update the smaller child index to be the right child
+				}	// Now smallerChildInd is the index of the smaller child
+				if (H[i].second > H[smallerChildInd].second)	// If there's a parent violation
 				{
-					I[H[i].first] = smallerChildInd;
-					I[H[smallerChildInd].first] = i;
-					swap(H[i], H[smallerChildInd]);
-					i = smallerChildInd;
+					I[H[i].first] = smallerChildInd;		// The parent item is moving to the smaller child's index
+					I[H[smallerChildInd].first] = i;		// The smaller child item is moving to the parent's index
+					swap(H[i], H[smallerChildInd]);			// Swap the two couples
+					i = smallerChildInd;					// Update i to the smaller child's index
 				}
 				else
 				{
-					break;
+					break;	// No parent violation, exit the loop
 				}
 			}
 
