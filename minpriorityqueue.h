@@ -39,14 +39,14 @@ class MinPriorityQueue
 		// into the MinPriorityQueue.
 		//
 		// Must run in O(log(n)) time.		 
-		void push(T x, int p)
+		void push(T x, int p)	// Runs in O(log(n)) time
 		{
-			pair<T, int> couple;
-			couple.first = x;
+			pair<T, int> couple;						// Create a pair to hold the value and priority
+			couple.first = x;		
 			couple.second = p;
-			H.push_back(couple);
-			int updIndex = bubbleUp(H.size() - 1);
-			I[x] = updIndex;
+			H.push_back(couple);						// Add the pair to the end of the heap vector
+			int updIndex = bubbleUp(H.size() - 1);		// Bubble up the last index
+			I[x] = updIndex;							// Update the index map
 		}
 
 		// Returns the value at the front of the MinPriorityQueue.
@@ -64,11 +64,32 @@ class MinPriorityQueue
 		// Must run in O(log(n)) time. 
 		void pop()
 		{
-			if (H.size()== 0){
-				cout << "There are no elements to pop."
+			if (H.size() == 0){
+				//cout << "There are no elements to pop." << endl;
 				return;
 			}
-			bubbleDown(0);
+
+			T eraseLater = H[0].first;
+
+			if (H.size() == 1){
+				H.pop_back();
+				I.erase(eraseLater);
+				return;
+			}
+
+			int sizeH = H.size();
+
+			pair<T, int> couple = H[sizeH - 1];
+			T tempT = H[sizeH - 1].first;
+			H.pop_back();
+			
+			H[0] = couple;
+
+			I.erase(eraseLater);
+
+			int updIndex = bubbleDown(0);
+
+			I[tempT] = updIndex;
 		}
 
 		// If x is in the MinPriorityQueue 
@@ -79,7 +100,33 @@ class MinPriorityQueue
 		// Must run in O(log(n)) time. 
 		void decrease_key(T x, int new_p)
 		{
-			// TODO
+			int sizeH = H.size();
+			if (new_p < 0)
+			{
+				cout << "Invalid key decrease, please input a positive integer." << endl;
+				return;
+			}
+
+			if (I.find(x) == I.end())
+				return;
+
+			int updIndex = 0;
+			int foundInd = I[x];
+			int old_p = H[foundInd].second;
+			if(new_p < old_p)
+			{
+				H[foundInd].second = new_p;
+				updIndex = bubbleUp(foundInd);
+				I[x] = updIndex;
+			}
+			else
+			{
+				//H[foundInd].second = new_p;
+				//updIndex = bubbleDown(foundInd);
+				//I[x] = updIndex;
+				cout << "This code doesn't increase the priority." << endl;
+				return;
+			}
 		}
 
 	private:
@@ -118,6 +165,7 @@ class MinPriorityQueue
 			}
 			return i;
 		}
+
 		int bubbleDown(int index)
 		{
 			int i = index;
@@ -126,7 +174,21 @@ class MinPriorityQueue
 			while (childLeft(i)<sizeH)		// Check that at least there's a left child
 			{
 				int smallerChildInd = childLeft(i);
-				if (childRight(i)<sizeH && H[childRight(i)].second < H[childLeft(i)].second )
+				if (childRight(i)<sizeH && H[childRight(i)].second < H[childLeft(i)].second)
+				{
+					smallerChildInd = childRight(i);
+				}
+				if (H[i].second > H[smallerChildInd].second)
+				{
+					I[H[i].first] = smallerChildInd;
+					I[H[smallerChildInd].first] = i;
+					swap(H[i], H[smallerChildInd]);
+					i = smallerChildInd;
+				}
+				else
+				{
+					break;
+				}
 			}
 
 			return i;
